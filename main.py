@@ -17,7 +17,7 @@ def getArgs(args, param):
                 print("Exec format: python main.py [args] | python main.py -h for help")
                 print("Commands:")
                 print('-i "imageName" || -f "filterName"')
-                print('Available filters: "avg" or "pAvg"')
+                print('Available filters: "avg"||"pAvg"||"laplace"||"sobel"')
                 # print('-f format of image output, can be: "cmyk" or "hsi')
                 return False
         for i in range(1, len(args)):
@@ -46,6 +46,10 @@ if __name__ == '__main__':
       filt.AverageFilter()
     elif filterName == 'pAvg':
       filt.AveragePondFilter()
+    elif filterName == 'laplace':
+      filt.laPlaceFilter()
+    elif filterName == 'sobel':
+      filt.sobelFilter()
     # eq = Equalizer(imgName)
     # eq.imgNormalizer()
 

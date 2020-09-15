@@ -30,6 +30,36 @@ class Filter:
     plt.show()
     return newImg
   
+  def laPlaceFilter(self):
+    img = imread(self.file)
+    x, y, z = np.shape(img)
+    newImg = np.zeros((x,y,z), dtype=np.uint16)
+    for i in range(np.shape(img)[0]):
+      for j in range(np.shape(img)[1]):
+        windows = self.__getWindow(i, j, img)
+        newPixel = self.__sobelWindow(windows)
+        newImg[i][j][0] = newPixel[0]
+        newImg[i][j][1] = newPixel[1]
+        newImg[i][j][2] = newPixel[2]
+    imgPlot = plt.imshow(newImg)
+    plt.show()
+    return newImg
+  
+  def sobelFilter(self):
+    img = imread(self.file)
+    x, y, z = np.shape(img)
+    newImg = np.zeros((x,y,z), dtype=np.uint16)
+    for i in range(np.shape(img)[0]):
+      for j in range(np.shape(img)[1]):
+        windows = self.__getWindow(i, j, img)
+        newPixel = self.__sobelWindow(windows)
+        newImg[i][j][0] = newPixel[0]
+        newImg[i][j][1] = newPixel[1]
+        newImg[i][j][2] = newPixel[2]
+    imgPlot = plt.imshow(newImg)
+    plt.show()
+    return newImg
+
   def AveragePondFilter(self):
     img = imread(self.file)
     x, y, z = np.shape(img)
@@ -44,6 +74,27 @@ class Filter:
     imgPlot = plt.imshow(newImg)
     plt.show()
     return newImg
+
+  def __sobelWindow(self, window):
+    avgH = np.ones(DIM, dtype=np.uint8)
+    avgV = np.ones(DIM, dtype=np.uint8)
+    maskH = np.array([-1,-2,-1,0,0,0,1,2,1])
+    maskV = np.array([-1,0,1,-2,0,2,-1,0,1])
+    for i in range(DIM):
+      tempH = window[i].reshape((1,-1)) * maskH
+      tempV = window[i].reshape((1,-1)) * maskV
+      avgH[i] = np.sum(tempH, dtype=np.uint8)/8
+      avgV[i] = np.sum(tempV, dtype=np.uint8)/8
+    return avgH + avgV
+
+  def __laplaceWindow(self, window):
+    avg = np.ones(DIM, dtype=np.uint8)
+    mask = np.array([0,-1,0,-1,4,-1,0,-1,0])
+    
+    for i in range(DIM):
+      temp = window[i].reshape((1,-1)) * mask
+      avg[i] = np.sum(window[i], dtype=np.uint8)/8
+    return avg
 
   def __averagePondWindow(self, window):
     avg = np.ones(DIM)
